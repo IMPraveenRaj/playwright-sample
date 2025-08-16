@@ -1,17 +1,21 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'mcr.microsoft.com/playwright:focal'
+            args '--shm-size=2gb'
+        }
+    }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/IMPraveenRaj/playwright-sample.git'
+                git branch: 'main', url: 'https://github.com/<your-username>/playwright-sample.git'
             }
         }
 
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
-                sh 'npx playwright install --with-deps'
             }
         }
 
