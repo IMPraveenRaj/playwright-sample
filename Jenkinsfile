@@ -1,21 +1,23 @@
 pipeline {
-    agent {
-        docker {
-            image 'mcr.microsoft.com/playwright:focal'
-            args '--shm-size=2gb'
-        }
-    }
+    agent any
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/<your-username>/playwright-sample.git'
+                git branch: 'main', url: 'https://github.com/IMPraveenRaj/playwright-sample.git'
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Install Node & Dependencies') {
             steps {
-                sh 'npm install'
+                sh '''
+                apt-get update
+                apt-get install -y curl gnupg
+                curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+                apt-get install -y nodejs
+                npm install
+                npx playwright install --with-deps
+                '''
             }
         }
 
