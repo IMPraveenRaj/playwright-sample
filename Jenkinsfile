@@ -2,6 +2,7 @@ pipeline {
     agent {
         docker {
             image 'mcr.microsoft.com/playwright:focal'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
 
@@ -14,7 +15,10 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                sh '''
+                npm install
+                npx playwright install --with-deps
+                '''
             }
         }
 
