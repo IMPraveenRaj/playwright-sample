@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'mcr.microsoft.com/playwright:focal'
+        }
+    }
 
     stages {
         stage('Checkout') {
@@ -8,16 +12,9 @@ pipeline {
             }
         }
 
-        stage('Install Node & Dependencies') {
+        stage('Install Dependencies') {
             steps {
-                sh '''
-                apt-get update
-                apt-get install -y curl gnupg
-                curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-                apt-get install -y nodejs
-                npm install
-                npx playwright install --with-deps
-                '''
+                sh 'npm install'
             }
         }
 
